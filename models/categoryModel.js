@@ -4,7 +4,10 @@ const categorySchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
+  },
+  nameEn: {
+    type: String,
+    required: true,
   },
   nameUa: {
     type: String,
