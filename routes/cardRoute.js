@@ -1,5 +1,5 @@
 import express from "express";
-import { createCardWithImages } from "../controllers/cardController.js";
+import { createCard, getAllCards } from "../controllers/cardController.js";
 import { upload } from "../middlewares/imagesUpload.js";
 import checkAuth from "../middlewares/checkAuth.js";
 
@@ -13,7 +13,9 @@ router.post(
     { name: "image", maxCount: 1 },
     { name: "icon", maxCount: 1 },
   ]),
-  createCardWithImages
+  createCard
 );
+
+router.get("/cards", getAllCards);
 
 export default router;

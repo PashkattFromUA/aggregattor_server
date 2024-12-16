@@ -1,6 +1,6 @@
 import Card from "../models/cardModel.js";
 
-export const createCardWithImages = async (req, res) => {
+export const createCard = async (req, res) => {
   try {
     const { files, body } = req;
 
@@ -18,5 +18,14 @@ export const createCardWithImages = async (req, res) => {
     res.status(201).json(card);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+export const getAllCards = async (req, res) => {
+  try {
+    const cards = await Card.find();
+    return res.status(200).json(cards);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 };
