@@ -1,3 +1,8 @@
+# Игнорируем папку node_modules
 node_modules/
+
+# Игнорируем папку uploads
 uploads/
+
+# Игнорируем конкретный файл credits.js
 credits.js
