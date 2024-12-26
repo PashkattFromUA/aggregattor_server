@@ -1,6 +1,6 @@
 import Card from "../models/cardModel.js";
-import fs from 'fs';
-import path from 'path';
+import { promises as fsPromises } from "fs";
+import path from "path";
 
 export const createCard = async (req, res) => {
   try {
@@ -33,32 +33,42 @@ export const updateCard = async (req, res) => {
       return res.status(404).json({ message: "Card not found" });
     }
 
-    let newImagePath = card.image;  // Default to current image path
-    let newIconPath = card.icon;    // Default to current icon path
+    let newImagePath = card.image;
+    let newIconPath = card.icon;
 
-    // Delete old image if new image uploaded
     if (files.image && files.image[0]) {
-      const oldImagePath = path.join(process.cwd(), 'uploads', card.image.split('/').pop());
-      if (fs.existsSync(oldImagePath)) {
-        await fs.unlink(oldImagePath);  // Delete old image
+      const oldImagePath = path.join(
+        process.cwd(),
+        "uploads",
+        card.image.split("/").pop()
+      );
+      if (await fsPromises.stat(oldImagePath).catch(() => false)) {
+        await fsPromises.unlink(oldImagePath); // Удаляем старый файл
       }
-      newImagePath = `/uploads/${files.image[0].filename}`;  // New image path
+      newImagePath = `/uploads/${files.image[0].filename}`;
     }
 
-    // Delete old icon if new icon uploaded
     if (files.icon && files.icon[0]) {
-      const oldIconPath = path.join(process.cwd(), 'uploads', card.icon.split('/').pop());
-      if (fs.existsSync(oldIconPath)) {
-        await fs.unlink(oldIconPath);  // Delete old icon
+      const oldIconPath = path.join(
+        process.cwd(),
+        "uploads",
+        card.icon.split("/").pop()
+      );
+      if (await fsPromises.stat(oldIconPath).catch(() => false)) {
+        await fsPromises.unlink(oldIconPath); // Удаляем старый файл
       }
-      newIconPath = `/uploads/${files.icon[0].filename}`;  // New icon path
+      newIconPath = `/uploads/${files.icon[0].filename}`;
     }
 
-    const updatedCard = await Card.findByIdAndUpdate(id, {
-      ...body,
-      image: newImagePath,
-      icon: newIconPath,
-    }, { new: true });
+    const updatedCard = await Card.findByIdAndUpdate(
+      id,
+      {
+        ...body,
+        image: newImagePath,
+        icon: newIconPath,
+      },
+      { new: true }
+    );
 
     res.status(200).json(updatedCard);
   } catch (error) {
@@ -66,8 +76,6 @@ export const updateCard = async (req, res) => {
   }
 };
 
-
-// Delete Card
 export const deleteCard = async (req, res) => {
   try {
     const { id } = req.params;
@@ -77,18 +85,26 @@ export const deleteCard = async (req, res) => {
       return res.status(404).json({ message: "Card not found" });
     }
 
-    const imagePath = path.join(process.cwd(), 'uploads', card.image.split('/').pop());
-    const iconPath = path.join(process.cwd(), 'uploads', card.icon.split('/').pop());
+    const imagePath = path.join(
+      process.cwd(),
+      "uploads",
+      card.image.split("/").pop()
+    );
+    const iconPath = path.join(
+      process.cwd(),
+      "uploads",
+      card.icon.split("/").pop()
+    );
 
-    if (fs.existsSync(imagePath)) {
-      await fs.unlink(imagePath);  // Delete old image
+    if (await fsPromises.stat(imagePath).catch(() => false)) {
+      await fsPromises.unlink(imagePath);
     }
 
-    if (fs.existsSync(iconPath)) {
-      await fs.unlink(iconPath);  // Delete old icon
+    if (await fsPromises.stat(iconPath).catch(() => false)) {
+      await fsPromises.unlink(iconPath);
     }
 
-    await Card.findByIdAndDelete(id);  // Delete card from the database
+    await Card.findByIdAndDelete(id);
 
     res.status(200).json({ message: "Card deleted successfully" });
   } catch (error) {
