@@ -2,13 +2,14 @@ import Category from "../models/categoryModel.js";
 
 export const createCategory = async (req, res) => {
   try {
-    const { name, nameEn, nameRu, nameUa } = req.body;
+    const {
+      slug,
+      name: { en, ru, ua },
+    } = req.body;
 
     const catObj = {
-      name,
-      nameEn,
-      nameRu,
-      nameUa,
+      slug,
+      name: { en, ru, ua },
     };
 
     const category = await Category.create(catObj);
@@ -80,10 +81,18 @@ export const getCategoryById = async (req, res) => {
 
 export const getAllCategories = async (req, res) => {
   try {
+    const locale = req.headers['accept-language'] || 'en';
+
     const categories = await Category.find();
 
-    return res.status(200).json(categories);
+    const localizedCategories = categories.map((category) => ({
+      name: category.name[locale] || category.name['en'],
+      description: category.description[locale] || category.description['en'],
+    }));
+
+    return res.status(200).json(localizedCategories);
   } catch (err) {
     res.status(400).json({ message: "Failed to find all categories" });
   }
 };
+

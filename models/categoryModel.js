@@ -1,21 +1,11 @@
 import mongoose from "mongoose";
 
 const categorySchema = mongoose.Schema({
+  slug: { type: String, required: true },
   name: {
-    type: String,
-    required: true,
-  },
-  nameEn: {
-    type: String,
-    required: true,
-  },
-  nameUa: {
-    type: String,
-    required: true,
-  },
-  nameRu: {
-    type: String,
-    required: true,
+    en: { type: String, required: true },
+    ru: { type: String, required: true },
+    ua: { type: String, required: true },
   },
 });
 
