@@ -81,18 +81,18 @@ export const getCategoryById = async (req, res) => {
 
 export const getAllCategories = async (req, res) => {
   try {
-    const locale = req.headers['accept-language'] || 'en';
+    const locale = req.headers["Accept-language"] || "en";
 
     const categories = await Category.find();
 
     const localizedCategories = categories.map((category) => ({
-      name: category.name[locale] || category.name['en'],
-      description: category.description[locale] || category.description['en'],
+      name: category.name[locale] || category.name["en"],
+      slug: category.slug,
     }));
+    console.log(localizedCategories);
 
     return res.status(200).json(localizedCategories);
   } catch (err) {
     res.status(400).json({ message: "Failed to find all categories" });
   }
 };
-
