@@ -6,7 +6,7 @@ import cardRouter from "./routes/cardRoute.js";
 import { fileURLToPath } from "url";
 import path from "path";
 
-const PORT = 3000;
+const PORT = 8000;
 const app = express();
 
 app.use(express.json());
