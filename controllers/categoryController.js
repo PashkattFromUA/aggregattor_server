@@ -81,7 +81,7 @@ export const getCategoryById = async (req, res) => {
 
 export const getAllCategories = async (req, res) => {
   try {
-    const locale = req.headers["Accept-language"] || "en";
+    const locale = req.headers["accept-language"] || "en";
 
     const categories = await Category.find();
 
