@@ -64,6 +64,7 @@ export const deleteCategory = async (req, res) => {
 export const getCategoryById = async (req, res) => {
   try {
     const categoryId = req.params.id;
+    const locale = req.headers["accept-language"] || "en";
 
     const category = await Category.findOne({
       _id: categoryId,
@@ -73,7 +74,15 @@ export const getCategoryById = async (req, res) => {
       return res.status(404).json({ message: "Category not found" });
     }
 
-    return res.status(200).json(category);
+    const localizedCategory = {
+      name: category.name[locale] || category.name["en"],
+      slug: category.slug,
+      id: category.id,
+    };
+    
+    console.log(localizedCategory);
+
+    return res.status(200).json(localizedCategory);
   } catch (err) {
     res.status(400).json({ message: "Failed to found category" });
   }
@@ -88,6 +97,7 @@ export const getAllCategories = async (req, res) => {
     const localizedCategories = categories.map((category) => ({
       name: category.name[locale] || category.name["en"],
       slug: category.slug,
+      id: category.id,
     }));
     console.log(localizedCategories);
 
