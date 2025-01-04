@@ -12,8 +12,8 @@ const cardSchema = mongoose.Schema(
     rating: { type: String, required: true },
     ratingUrl: { type: String, required: true },
     link: { type: String, required: true },
+    smlink: { type: String, required: true },
     icon: { type: String, required: true },
-    image: { type: String, required: true },
     place: {
       en: { type: String, required: true },
       ua: { type: String, required: true },

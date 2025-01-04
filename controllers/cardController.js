@@ -6,14 +6,13 @@ export const createCard = async (req, res) => {
   try {
     const { files, body } = req;
 
-    if (!files.image || !files.icon) {
-      return res.status(400).json({ message: "Image and icon are required" });
+    if (!files.icon) {
+      return res.status(400).json({ message: "Icon are required" });
     }
 
     const card = await Card.create({
       ...body,
-      image: `/uploads/${files.image[0].filename}`,
-      icon: `/uploads/${files.icon[0].filename}`,
+      icon: `/uploads/${files.icon[0].filename}`
     });
 
     await card.save();
@@ -33,20 +32,7 @@ export const updateCard = async (req, res) => {
       return res.status(404).json({ message: "Card not found" });
     }
 
-    let newImagePath = card.image;
     let newIconPath = card.icon;
-
-    if (files.image && files.image[0]) {
-      const oldImagePath = path.join(
-        process.cwd(),
-        "uploads",
-        card.image.split("/").pop()
-      );
-      if (await fsPromises.stat(oldImagePath).catch(() => false)) {
-        await fsPromises.unlink(oldImagePath); 
-      }
-      newImagePath = `/uploads/${files.image[0].filename}`;
-    }
 
     if (files.icon && files.icon[0]) {
       const oldIconPath = path.join(
@@ -64,7 +50,6 @@ export const updateCard = async (req, res) => {
       id,
       {
         ...body,
-        image: newImagePath,
         icon: newIconPath,
       },
       { new: true }
@@ -85,20 +70,11 @@ export const deleteCard = async (req, res) => {
       return res.status(404).json({ message: "Card not found" });
     }
 
-    const imagePath = path.join(
-      process.cwd(),
-      "uploads",
-      card.image.split("/").pop()
-    );
     const iconPath = path.join(
       process.cwd(),
       "uploads",
       card.icon.split("/").pop()
     );
-
-    if (await fsPromises.stat(imagePath).catch(() => false)) {
-      await fsPromises.unlink(imagePath);
-    }
 
     if (await fsPromises.stat(iconPath).catch(() => false)) {
       await fsPromises.unlink(iconPath);
@@ -136,7 +112,6 @@ export const getCardById = async (req, res) => {
       ratingUrl: card.ratingUrl,
       link: card.link,
       icon: card.icon,
-      image: card.image,
     };
     console.log(localizedCard);
 
@@ -166,7 +141,6 @@ export const getAllCards = async (req, res) => {
       ratingUrl: card.ratingUrl,
       link: card.link,
       icon: card.icon,
-      image: card.image,
     }));
     console.log(localizedCards);
     return res.status(200).json(localizedCards);
