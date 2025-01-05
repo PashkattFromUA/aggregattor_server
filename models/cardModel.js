@@ -9,6 +9,7 @@ const cardSchema = mongoose.Schema(
       ua: { type: String, required: true },
     },
     slug: { type: String, required: true, unique: true },
+    catslug: { type: String, required: true},
     rating: { type: String, required: true },
     ratingUrl: { type: String, required: true },
     link: { type: String, required: true },
