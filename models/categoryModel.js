@@ -7,6 +7,11 @@ const categorySchema = mongoose.Schema({
     ru: { type: String, required: true },
     ua: { type: String, required: true },
   },
+  description: {
+    en: { type: String, required: true },
+    ru: { type: String, required: true },
+    ua: { type: String, required: true },
+  },
 });
 
 const Category = mongoose.model("Category", categorySchema);
