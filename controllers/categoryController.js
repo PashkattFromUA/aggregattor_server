@@ -76,6 +76,7 @@ export const getCategoryById = async (req, res) => {
 
     const localizedCategory = {
       name: category.name[locale] || category.name["en"],
+      description: category.description[locale] || category.name["en"],
       slug: category.slug,
       id: category.id,
     };
@@ -96,6 +97,7 @@ export const getAllCategories = async (req, res) => {
 
     const localizedCategories = categories.map((category) => ({
       name: category.name[locale] || category.name["en"],
+      description: category.description[locale] || category.name["en"],
       slug: category.slug,
       id: category.id,
     }));
